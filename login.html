@@ -1,0 +1,201 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign-Up, Login, and Profile</title>
+  <style>
+    /* General Styles */
+    body {
+      background: #DCDDDF url(pexels-nicola-barts-7937483.jpg);
+      background-size: 1400px ;
+	    background-repeat: no-repeat;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 300px;
+      background: white;
+      padding: 2em;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 1em;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 1em;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5em;
+      color: #555;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8em;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.8em;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #status-message {
+      margin-top: 1em;
+      color: red;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="signup-section" class="container">
+    <h1>Sign Up</h1>
+    <form id="signup-form">
+      <div class="form-group">
+        <label for="signup-name">Full Name</label>
+        <input type="text" id="signup-name" placeholder="Enter your name" required>
+      </div>
+      <div class="form-group">
+        <label for="signup-email">Email</label>
+        <input type="email" id="signup-email" placeholder="Enter your email" required>
+      </div>
+      <div class="form-group">
+        <label for="signup-password">Password</label>
+        <input type="password" id="signup-password" placeholder="Enter your password" required>
+      </div>
+      <button type="submit">Sign Up</button>
+    </form>
+    <p id="signup-status-message"></p>
+    <p><a href="#" onclick="showLogin()">Already have an account? Login</a></p>
+  </div>
+
+  <div id="login-section" class="container hidden">
+    <h1>Login</h1>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" placeholder="Enter your email" required>
+      </div>
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" placeholder="Enter your password" required>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <p id="login-status-message"></p>
+    <p><a href="#" onclick="showSignup()">Don't have an account? Sign Up</a></p>
+  </div>
+
+  <div id="profile-section" class="container hidden">
+    <h1>Welcome</h1>
+    <a href ="cart.html">BACK TO CART </a>
+    <p id="user-name"></p>
+    <button onclick="logout()">Log Out</button>
+  </div>
+
+  <script>
+    // Utility function to show/hide sections
+    function showSignup() {
+      document.getElementById("signup-section").classList.remove("hidden");
+      document.getElementById("login-section").classList.add("hidden");
+      document.getElementById("profile-section").classList.add("hidden");
+    }
+
+    function showLogin() {
+      document.getElementById("signup-section").classList.add("hidden");
+      document.getElementById("login-section").classList.remove("hidden");
+      document.getElementById("profile-section").classList.add("hidden");
+    }
+
+    function showProfile(name) {
+      document.getElementById("signup-section").classList.add("hidden");
+      document.getElementById("login-section").classList.add("hidden");
+      document.getElementById("profile-section").classList.remove("hidden");
+      document.getElementById("user-name").textContent = "Hello, " + name + "!";
+    }
+
+    // Sign-up logic
+    document.getElementById("signup-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const name = document.getElementById("signup-name").value;
+      const email = document.getElementById("signup-email").value;
+      const password = document.getElementById("signup-password").value;
+
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+
+      if (users.some(user => user.email === email)) {
+        document.getElementById("signup-status-message").textContent = "Email already exists!";
+        return;
+      }
+
+      users.push({ name, email, password });
+      localStorage.setItem("users", JSON.stringify(users));
+      document.getElementById("signup-status-message").textContent = "Sign-up successful! Please login.";
+      document.getElementById("signup-form").reset();
+    });
+
+    // Login logic
+    document.getElementById("login-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      const user = users.find(user => user.email === email && user.password === password);
+
+      if (user) {
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
+        showProfile(user.name);
+      } else {
+        document.getElementById("login-status-message").textContent = "Invalid email or password.";
+      }
+    });
+
+    // Check for logged-in user on page load
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (loggedInUser) {
+      showProfile(pzz.html);
+    } else {
+      showSignup();
+    }
+
+    // Log out logic
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      showLogin();
+    }
+  </script>
+</body>
+</html>

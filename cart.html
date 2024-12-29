@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cart Page</title>
+<style>
+/* Cart Section */
+.cart {
+  padding: 50px 10%;
+  background-color: #f8f8f8;
+}
+.cart-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.cart h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.cart-item-img img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+.cart-item-details {
+  flex-grow: 1;
+  margin-left: 20px;
+}
+.cart-item-details h3 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+.cart-item-details .price {
+  color: #999;
+}
+.cart-item-quantity {
+  margin-top: 10px;
+}
+.cart-item-remove button {
+  background-color: #ff4040;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+.cart-item-remove button:hover {
+  background-color: #ff3030;
+}
+.cart-summary {
+  margin-top: 40px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.cart-summary h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+.cart-summary p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+.checkout-btn {
+  display: inline-block;
+  background-color: #ffb411;
+  padding: 12px 24px;
+  color: #fff;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+.checkout-btn:hover {
+  background-color: #ffa400;
+}
+</style>
+</head>
+<body>
+<section class="cart" id="cart">
+  <div class="cart-container">
+    <h2>Your Cart</h2>
+    <div class="cart-items">
+      <div class="cart-item" id="item-1">
+        <div class="cart-item-img">
+          <img src="https://raw.githubusercontent.com/r-e-d-ant/eCream/master/assets/images/product1.png"
+            alt="ice cream with honey" loading="lazy">
+        </div>
+        <div class="cart-item-details">
+          <h3>ice cream with honey</h3>
+          <p class="price">₹500</p>
+          <div class="cart-item-quantity">
+            <label for="quantity-1">Quantity:</label>
+            <input type="number" id="quantity-1" name="quantity" value="0" min="0">
+          </div>
+        </div>
+        <div class="cart-item-remove">
+          <button class="remove-btn">Remove</button>
+        </div>
+      </div>
+      <div class="cart-item" id="item-2">
+        <div class="cart-item-img">
+          <img src="https://raw.githubusercontent.com/r-e-d-ant/eCream/master/assets/images/product2.jpg"
+            alt="ice cream with honey" loading="lazy">
+        </div>
+        <div class="cart-item-details">
+          <h3>honey choco</h3>
+          <p class="price">₹400</p>
+          <div class="cart-item-quantity">
+            <label for="quantity-2">Quantity:</label>
+            <input type="number" id="quantity-2" name="quantity" value="0" min="0">
+          </div>
+        </div>
+        <div class="cart-item-remove">
+          <button class="remove-btn">Remove</button>
+        </div>
+      </div>
+      <div class="cart-item" id="item-3">
+        <div class="cart-item-img">
+          <img src="https://raw.githubusercontent.com/r-e-d-ant/eCream/master/assets/images/product3.png"
+            alt="ice cream with honey" loading="lazy">
+        </div>
+        <div class="cart-item-details">
+          <h3>carnival strawberry combo</h3>
+          <p class="price">₹1000</p>
+          <div class="cart-item-quantity">
+            <label for="quantity-3">Quantity:</label>
+            <input type="number" id="quantity-3" name="quantity" value="0" min="0">
+          </div>
+        </div>
+        <div class="cart-item-remove">
+          <button class="remove-btn">Remove</button>
+        </div>
+      </div>
+    </div>
+    <div class="cart-summary">
+      <h3>Order Summary</h3>
+      <p id="total-price">Total: ₹0</p>
+      <a href="checkout.html" class="btn checkout-btn">Proceed to Checkout</a>
+    </div>
+  </div>
+</section>
+<script>
+function updateCartTotal() {
+  let total = 0;
+  document.querySelectorAll('.cart-item').forEach(item => {
+    const price = parseFloat(item.querySelector('.price').textContent.replace('₹', ''));
+    const quantity = parseInt(item.querySelector('input[type="number"]').value) || 0;
+    total += price * quantity;
+  });
+  document.getElementById('total-price').textContent = `Total: ₹${total.toFixed(2)}`;
+}
+
+document.querySelectorAll('.cart-item-quantity input').forEach(input => {
+  input.addEventListener('input', updateCartTotal);
+});
+
+document.querySelectorAll('.remove-btn').forEach(button => {
+  button.addEventListener('click', event => {
+    const item = event.target.closest('.cart-item');
+    item.remove();
+    updateCartTotal();
+  });
+});
+
+updateCartTotal();
+</script>
+</body>
+</html>
